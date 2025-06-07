@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Combined Web App</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { margin: 0 10px; text-decoration: none; color: blue; }
+    section { margin-top: 40px; }
+    li.completed { text-decoration: line-through; color: gray; }
+    h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+    input, select, button { margin: 5px 0; padding: 5px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>My Portfolio</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#todo">To-Do List</a>
+      <a href="#products">Products</a>
+    </nav>
+  </header>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I am a web developer passionate about creating interactive applications.</p>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects">
+    <h2>Projects</h2>
+    <ul id="project-list"></ul>
+  </section>
+
+  <!-- To-Do List Section -->
+  <section id="todo">
+    <h2>To-Do List</h2>
+    <input type="text" id="new-task" placeholder="Add new task">
+    <button onclick="addTask()">Add</button>
+    <ul id="tasks"></ul>
+  </section>
+
+  <!-- Product Listing Section -->
+  <section id="products">
+    <h2>Product Listing</h2>
+    <label>Filter by Category:
+      <select id="filter" onchange="renderProducts()">
+        <option value="all">All</option>
+        <option value="electronics">Electronics</option>
+        <option value="clothing">Clothing</option>
+      </select>
+    </label>
+
+    <label>Sort by Price:
+      <select id="sort" onchange="renderProducts()">
+        <option value="low-high">Low to High</option>
+        <option value="high-low">High to Low</option>
+      </select>
+    </label>
+
+    <ul id="product-list"></ul>
+  </section>
+
+  <script>
+    // Portfolio Projects
+    const projects = ['To-Do List App', 'Product Page', 'Portfolio Website'];
+    const projectList = document.getElementById('project-list');
+    projects.forEach(proj => {
+      const li = document.createElement('li');
+      li.textContent = proj;
+      projectList.appendChild(li);
+    });
+
+    // To-Do List Functionality
+    function addTask() {
+      const input = document.getElementById('new-task');
+      const taskText = input.value.trim();
+      if (!taskText) return;
+
+      const li = document.createElement('li');
+      li.textContent = taskText;
+      li.onclick = () => li.classList.toggle('completed');
+      document.getElementById('tasks').appendChild(li);
+      input.value = '';
+    }
+
+    // Product Listing
+    const products = [
+      { name: 'Phone', price: 699, category: 'electronics' },
+      { name: 'T-Shirt', price: 19, category: 'clothing' },
+      { name: 'Laptop', price: 1200, category: 'electronics' },
+      { name: 'Jeans', price: 40, category: 'clothing' }
+    ];
+
+    function renderProducts() {
+      const filter = document.getElementById('filter').value;
+      const sort = document.getElementById('sort').value;
+
+      let filtered = filter === 'all'
+        ? products
+        : products.filter(p => p.category === filter);
+
+      filtered.sort((a, b) =>
+        sort === 'low-high' ? a.price - b.price : b.price - a.price
+      );
+
+      const list = document.getElementById('product-list');
+      list.innerHTML = '';
+      filtered.forEach(product => {
+        const li = document.createElement('li');
+        li.textContent = `${product.name} - $${product.price}`;
+        list.appendChild(li);
+      });
+    }
+
+    window.onload = renderProducts;
+  </script>
+
+</body>
+</html>
